@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -18,6 +19,7 @@ import com.module05.calculadoraimc.components.Espacio
 import com.module05.calculadoraimc.components.Inputs
 import com.module05.calculadoraimc.components.MultiButtonSegmentado
 import com.module05.calculadoraimc.components.Texto
+import java.math.RoundingMode
 
 @Composable
 fun HomeView(paddingValues: PaddingValues){
@@ -27,6 +29,8 @@ fun HomeView(paddingValues: PaddingValues){
     var altura by remember { mutableStateOf("") }
 
     val sexo = remember { mutableStateOf(0) }
+
+    var res = remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
@@ -45,6 +49,13 @@ fun HomeView(paddingValues: PaddingValues){
         Espacio(10.dp)
         Inputs("Altura (cm)", { altura = it }, altura )
         Espacio(20.dp)
-        Boton()
+        Boton(calcular = { realizarCalculo(peso, altura, res) })
+        Espacio(size = 30.dp)
+        Texto(texto = res.value, size = 40)
     }
+}
+
+fun realizarCalculo(peso: String, altura: String, res: MutableState<String>){
+    val resultado = "${peso.toDouble() / (altura.toDouble() * altura.toDouble())}"
+    res.value = (resultado.toBigDecimal().setScale(1, RoundingMode.HALF_UP).toDouble()).toString();
 }

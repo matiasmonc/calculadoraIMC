@@ -51,9 +51,9 @@ fun Espacio(size: Dp){
 }
 
 @Composable
-fun Boton(){
+fun Boton(calcular: () -> Unit){
     Button(
-        onClick = { /*TODO*/ },
+        onClick = { calcular() },
         modifier = Modifier
             .fillMaxWidth()
     ) {
@@ -89,7 +89,7 @@ fun MultiButtonSegmentado( sexo: MutableState<Int>){
                 modifier = Modifier
                     .weight(1f)
                     .background(
-                        if(isSelected) Color.LightGray else Color.White
+                        if (isSelected) Color.LightGray else Color.White
 
                     )
                     .clickable { sexo.value = index }
