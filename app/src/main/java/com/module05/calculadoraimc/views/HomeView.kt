@@ -19,18 +19,13 @@ import com.module05.calculadoraimc.components.Espacio
 import com.module05.calculadoraimc.components.Inputs
 import com.module05.calculadoraimc.components.MultiButtonSegmentado
 import com.module05.calculadoraimc.components.Texto
+import com.module05.calculadoraimc.viewmodel.ImcViewModel
 import java.math.RoundingMode
 
 @Composable
-fun HomeView(paddingValues: PaddingValues){
+fun HomeView(paddingValues: PaddingValues, imcViewModel: ImcViewModel){
 
-    var edad by remember { mutableStateOf("") }
-    var peso by remember { mutableStateOf("") }
-    var altura by remember { mutableStateOf("") }
-
-    val sexo = remember { mutableStateOf(0) }
-
-    var res = remember { mutableStateOf("") }
+    val state = imcViewModel.state
 
     Column(
         modifier = Modifier
@@ -40,22 +35,29 @@ fun HomeView(paddingValues: PaddingValues){
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
         Texto(texto = "Calculadora de IMC", size = 30)
         Espacio(20.dp)
-        MultiButtonSegmentado(sexo)
-        Inputs("Edad", { edad = it }, edad )
+        MultiButtonSegmentado(state.sexo) {
+            index, key -> imcViewModel.onValue(index.toString(), key)
+        }
+        Inputs(
+            label = "Edad",
+            onValueChange = { imcViewModel.onValue(it, "edad") },
+            value = state.edad.toString() )
         Espacio(10.dp)
-        Inputs("Peso (Kg)", { peso = it }, peso )
+        Inputs(
+            label = "Peso (Kg)",
+            onValueChange = { imcViewModel.onValue(it, "peso") },
+            value = state.peso.toString() )
         Espacio(10.dp)
-        Inputs("Altura (cm)", { altura = it }, altura )
+        Inputs(
+            label = "Altura (cm)",
+            onValueChange = { imcViewModel.onValue(it, "altura") },
+            value = state.altura.toString() )
         Espacio(20.dp)
-        Boton(calcular = { realizarCalculo(peso, altura, res) })
+        Boton(calcular = { imcViewModel.calcular() })
         Espacio(size = 30.dp)
-        Texto(texto = res.value, size = 40)
+        Texto(texto = state.res, size = 40)
     }
-}
-
-fun realizarCalculo(peso: String, altura: String, res: MutableState<String>){
-    val resultado = "${peso.toDouble() / (altura.toDouble() * altura.toDouble())}"
-    res.value = (resultado.toBigDecimal().setScale(1, RoundingMode.HALF_UP).toDouble()).toString();
 }

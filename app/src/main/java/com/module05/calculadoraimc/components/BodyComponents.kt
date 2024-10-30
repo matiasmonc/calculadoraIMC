@@ -62,7 +62,7 @@ fun Boton(calcular: () -> Unit){
 }
 
 @Composable
-fun MultiButtonSegmentado( sexo: MutableState<Int>){
+fun MultiButtonSegmentado( sexo: Int, onValue: (Int, String) -> Unit){
 
     var options = listOf("Hombre", "Mujer")
 
@@ -75,7 +75,7 @@ fun MultiButtonSegmentado( sexo: MutableState<Int>){
             .background(Color.White)
     ) {
         options.forEachIndexed { index, option ->
-            val isSelected = index == sexo.value
+            val isSelected = index == sexo
 
             if(index > 0){
                 Box(
@@ -92,7 +92,7 @@ fun MultiButtonSegmentado( sexo: MutableState<Int>){
                         if (isSelected) Color.LightGray else Color.White
 
                     )
-                    .clickable { sexo.value = index }
+                    .clickable { onValue(index, "sexo") }
                     .padding(vertical = 8.dp),
                 contentAlignment = Alignment.Center
             ){
