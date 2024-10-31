@@ -14,6 +14,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.module05.calculadoraimc.components.Alert
 import com.module05.calculadoraimc.components.Boton
 import com.module05.calculadoraimc.components.Espacio
 import com.module05.calculadoraimc.components.Inputs
@@ -26,7 +27,7 @@ import java.math.RoundingMode
 fun HomeView(paddingValues: PaddingValues, imcViewModel: ImcViewModel){
 
     val state = imcViewModel.state
-
+    var showAlert by remember { mutableStateOf(false)}
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -56,8 +57,24 @@ fun HomeView(paddingValues: PaddingValues, imcViewModel: ImcViewModel){
             onValueChange = { imcViewModel.onValue(it, "altura") },
             value = state.altura.toString() )
         Espacio(20.dp)
-        Boton(calcular = { imcViewModel.calcular() })
+        Boton(calcular = {
+            if(state.peso != "" && state.altura != "" ){
+                imcViewModel.calcular()
+            }else{
+                showAlert = true
+            }
+        })
         Espacio(size = 30.dp)
         Texto(texto = state.res, size = 40)
+
+        if(showAlert){
+            Alert(
+                title = "Error",
+                msj = "Ingresa el Peso y al Altura",
+                confirmText = "Aceptar",
+                onConfirmClick = { showAlert = false },
+                onDismissClick = { showAlert = false }
+            )
+        }
     }
 }

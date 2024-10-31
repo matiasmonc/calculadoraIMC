@@ -12,8 +12,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -104,4 +106,24 @@ fun MultiButtonSegmentado( sexo: Int, onValue: (Int, String) -> Unit){
             }
         }
     }
+}
+
+@Composable
+fun Alert(
+    title: String,
+    msj: String,
+    confirmText: String,
+    onConfirmClick: () -> Unit,
+    onDismissClick: () -> Unit
+){
+    AlertDialog(
+        onDismissRequest = onDismissClick,
+        title = { Text(text = title) },
+        text = { Text( text = msj )},
+        shape = CutCornerShape(10.dp),
+        confirmButton = {
+            Button(onClick = onConfirmClick) {
+                Text( text = confirmText)
+            }
+        })
 }
